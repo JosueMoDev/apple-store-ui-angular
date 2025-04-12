@@ -22,6 +22,10 @@ export const uiRoutes: Routes = [
       },
     ],
   },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];
 
 export default uiRoutes;

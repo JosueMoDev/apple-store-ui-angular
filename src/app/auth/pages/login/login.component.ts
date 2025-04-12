@@ -10,26 +10,10 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
-import { Apollo, gql } from 'apollo-angular';
 import { Subscription } from 'rxjs';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '@services/auth.service';
 
-const Login = gql`
-  query Login($loginInput: LoginInput!) {
-    Login(loginInput: $loginInput) {
-      user {
-        id
-        lastName
-        firstName
-        email
-        emailVerified
-        role
-        isActive
-        picture
-      }
-    }
-  }
-`;
 @Component({
   selector: 'app-login',
   imports: [
@@ -47,33 +31,20 @@ const Login = gql`
 export class LoginComponent {
   private querySubscription!: Subscription;
   private fb = inject(NonNullableFormBuilder);
-  private readonly apollo = inject(Apollo);
+  private authService = inject(AuthService);
 
   loginForm = this.fb.group({
-    email: this.fb.control('jonasjosuemorales@gmail.com', [
-      Validators.required,
-      Validators.email,
-    ]),
-    password: this.fb.control('abcdefgH12', [Validators.required]),
+    email: this.fb.control('', [Validators.required, Validators.email]),
+    password: this.fb.control('', [Validators.required]),
     remember: this.fb.control(true),
   });
 
   submitForm(): void {
     if (this.loginForm.valid) {
-      const form = this.loginForm.value;
-      this.querySubscription = this.apollo
-        .watchQuery({
-          query: Login,
-          variables: {
-            loginInput: {
-              email: form.email,
-              password: form.password,
-            },
-          },
-        })
-        .valueChanges.subscribe(({ data }: any) => {
-          console.log(data.Login.user);
-        });
+      const { remember, ...form } = this.loginForm.value;
+      this.querySubscription = this.authService
+        .login(form)
+        .subscribe(({ data }) => console.log(data));
     } else {
       Object.values(this.loginForm.controls).forEach((control) => {
         if (control.invalid) {

@@ -10,24 +10,9 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
-import { Apollo, gql } from 'apollo-angular';
-import { catchError, of, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { RouterLink } from '@angular/router';
-
-const REGISTER_USER = gql`
-  mutation RegisterUser($registerUserInput: CreateUserInput!) {
-    registerUser(registerUserInput: $registerUserInput) {
-      role
-      lastName
-      picture
-      isActive
-      firstName
-      email
-      id
-      emailVerified
-    }
-  }
-`;
+import { AuthService } from '@services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -46,7 +31,7 @@ const REGISTER_USER = gql`
 export class RegisterComponent {
   private querySubscription!: Subscription;
   private fb = inject(NonNullableFormBuilder);
-  private readonly apollo = inject(Apollo);
+  private authService = inject(AuthService);
 
   registerForm = this.fb.group({
     firstName: this.fb.control('', [Validators.required]),
@@ -58,19 +43,8 @@ export class RegisterComponent {
   submitForm(): void {
     if (this.registerForm.valid) {
       const form = this.registerForm.value;
-      this.querySubscription = this.apollo
-        .mutate({
-          mutation: REGISTER_USER,
-          variables: {
-            registerUserInput: form,
-          },
-        })
-        .pipe(
-          catchError((error) => {
-            console.error('Error en la mutación:', error);
-            return of({ data: null });
-          })
-        )
+      this.querySubscription = this.authService
+        .createUser(form)
         .subscribe(({ data }) => {
           if (data) {
             console.log('Usuario registrado:', data);

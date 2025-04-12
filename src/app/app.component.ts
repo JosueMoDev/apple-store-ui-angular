@@ -10,5 +10,5 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'APPLE-STORE-UI-ANGULAR';
+  title = 'apple-store';
 }

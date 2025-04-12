@@ -1,7 +1,7 @@
 <nz-card class="card">
   <form
     nz-form
-    [formGroup]="validateForm"
+    [formGroup]="loginForm"
     class="login-form"
     (ngSubmit)="submitForm()"
   >
@@ -47,6 +47,6 @@
       Log in
     </button>
     Or
-    <a>register now!</a>
+    <a [routerLink]="['/auth/register']">register now!</a>
   </form>
 </nz-card>

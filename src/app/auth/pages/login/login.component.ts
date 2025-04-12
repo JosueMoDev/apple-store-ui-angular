@@ -12,6 +12,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { Apollo, gql } from 'apollo-angular';
 import { Subscription } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 const Login = gql`
   query Login($loginInput: LoginInput!) {
@@ -38,6 +39,7 @@ const Login = gql`
     NzInputModule,
     NzCardModule,
     NzCheckboxModule,
+    RouterLink,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -47,7 +49,7 @@ export class LoginComponent {
   private fb = inject(NonNullableFormBuilder);
   private readonly apollo = inject(Apollo);
 
-  validateForm = this.fb.group({
+  loginForm = this.fb.group({
     email: this.fb.control('jonasjosuemorales@gmail.com', [
       Validators.required,
       Validators.email,
@@ -57,8 +59,8 @@ export class LoginComponent {
   });
 
   submitForm(): void {
-    if (this.validateForm.valid) {
-      const form = this.validateForm.value;
+    if (this.loginForm.valid) {
+      const form = this.loginForm.value;
       this.querySubscription = this.apollo
         .watchQuery({
           query: Login,
@@ -73,7 +75,7 @@ export class LoginComponent {
           console.log(data.Login.user);
         });
     } else {
-      Object.values(this.validateForm.controls).forEach((control) => {
+      Object.values(this.loginForm.controls).forEach((control) => {
         if (control.invalid) {
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
@@ -83,6 +85,6 @@ export class LoginComponent {
   }
 
   ngOnDestroy() {
-    this.querySubscription.unsubscribe();
+    this.querySubscription?.unsubscribe();
   }
 }

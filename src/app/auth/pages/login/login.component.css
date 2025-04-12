@@ -1,5 +1,6 @@
 .login-form {
   max-width: 300px;
+  width: 300px;
 }
 
 .login-form-margin {
@@ -16,7 +17,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Ocupa toda la altura de la ventana */
-  background-color: #f0f2f5;
   width: 400px;
 }

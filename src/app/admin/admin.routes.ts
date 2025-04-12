@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { ProductComponent } from './pages/product/product.component';
-import { ProductsComponent } from './pages/products/products.component';
-import { LayoutComponent } from './layout/layout.component';
+import { ProductComponent } from '@admin/pages/product/product.component';
+import { ProductsComponent } from '@admin/pages/products/products.component';
+import { LayoutComponent } from '@admin/layout/layout.component';
 
 export const adminRoutes: Routes = [
   {

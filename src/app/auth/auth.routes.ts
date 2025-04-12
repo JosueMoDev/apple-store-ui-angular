@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './pages/login/login.component';
-import { RegisterComponent } from './pages/register/register.component';
-import { LayoutComponent } from './layout/layout.component';
+import { LoginComponent } from '@auth/pages/login/login.component';
+import { RegisterComponent } from '@auth/pages/register/register.component';
+import { LayoutComponent } from '@auth/layout/layout.component';
 
 export const authRoutes: Routes = [
   {
